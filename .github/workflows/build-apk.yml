@@ -56,7 +56,19 @@ jobs:
           }
           EOF
 
-      - name: Build Debug APK
+      - name: Generate Keystore
+        run: |
+          keytool -genkeypair \
+            -alias zadelmomen \
+            -keyalg RSA -keysize 2048 \
+            -validity 9125 \
+            -keystore zadelmomen.jks \
+            -storepass zadelmomen123 \
+            -keypass zadelmomen123 \
+            -dname "CN=ZadElMomen,O=Islamic,C=EG" \
+            -noprompt
+
+      - name: Build Release APK
         env:
           SUPABASE_URL: https://placeholder.supabase.co
           SUPABASE_KEY: placeholder_key_for_build_only
@@ -65,19 +77,18 @@ jobs:
           SUPPORT_10: placeholder_10
           SUPPORT_25: placeholder_25
           SUPPORT_100: placeholder_100
-        run: ./gradlew assembleDebug --build-cache
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: zad-el-momen-debug
-          path: app/build/outputs/apk/debug/*.apk
+        run: |
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=${{ github.workspace }}/zadelmomen.jks \
+            -Pandroid.injected.signing.store.password=zadelmomen123 \
+            -Pandroid.injected.signing.key.alias=zadelmomen \
+            -Pandroid.injected.signing.key.password=zadelmomen123
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "build-${{ github.run_number }}"
           name: "زاد المؤمن - إصدار ${{ github.run_number }}"
-          files: app/build/outputs/apk/debug/*.apk
+          files: app/build/outputs/apk/release/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
