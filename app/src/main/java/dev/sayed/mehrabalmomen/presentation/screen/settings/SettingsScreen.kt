@@ -426,9 +426,9 @@ fun SettingsItem(
     }
 }
 
-//fun openStoreReview(context: Context) {
-    //val uri = "market://details?id=${context.packageName}".toUri()
-    //val intent = Intent(Intent.ACTION_VIEW, uri)
-  //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    //context.startActivity(intent)
+fun openStoreReview(context: Context) {
+    val uri = "market://details?id=${context.packageName}".toUri()
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    context.startActivity(intent)
 }
