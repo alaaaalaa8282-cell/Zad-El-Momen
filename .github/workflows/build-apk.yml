@@ -16,21 +16,14 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Cache Gradle
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
+          cache: gradle
 
       - name: Make gradlew executable
         run: chmod +x gradlew
 
       - name: Create google-services.json
         run: |
+          mkdir -p app/
           cat > app/google-services.json << 'EOF'
           {
             "project_info": {
@@ -63,21 +56,16 @@ jobs:
           }
           EOF
 
-      - name: Create local.properties
-        run: |
-          cat > local.properties << EOF
-          sdk.dir=$ANDROID_HOME
-          SUPABASE_URL=https://placeholder.supabase.co
-          SUPABASE_KEY=placeholder_key_for_build_only
-          SUPPORT_1=placeholder_1
-          SUPPORT_5=placeholder_5
-          SUPPORT_10=placeholder_10
-          SUPPORT_25=placeholder_25
-          SUPPORT_100=placeholder_100
-          EOF
-
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        env:
+          SUPABASE_URL: https://placeholder.supabase.co
+          SUPABASE_KEY: placeholder_key_for_build_only
+          SUPPORT_1: placeholder_1
+          SUPPORT_5: placeholder_5
+          SUPPORT_10: placeholder_10
+          SUPPORT_25: placeholder_25
+          SUPPORT_100: placeholder_100
+        run: ./gradlew assembleDebug --build-cache
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -91,7 +79,5 @@ jobs:
           tag_name: "build-${{ github.run_number }}"
           name: "زاد المؤمن - إصدار ${{ github.run_number }}"
           files: app/build/outputs/apk/debug/*.apk
-          draft: false
-          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
