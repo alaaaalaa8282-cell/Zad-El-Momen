@@ -67,13 +67,13 @@ jobs:
         run: |
           cat > local.properties << EOF
           sdk.dir=$ANDROID_HOME
-          SUPABASE_URL="https://placeholder.supabase.co"
-          SUPABASE_KEY="placeholder_key_for_build_only"
-          SUPPORT_1="placeholder_1"
-          SUPPORT_5="placeholder_5"
-          SUPPORT_10="placeholder_10"
-          SUPPORT_25="placeholder_25"
-          SUPPORT_100="placeholder_100"
+          SUPABASE_URL=https://placeholder.supabase.co
+          SUPABASE_KEY=placeholder_key_for_build_only
+          SUPPORT_1=placeholder_1
+          SUPPORT_5=placeholder_5
+          SUPPORT_10=placeholder_10
+          SUPPORT_25=placeholder_25
+          SUPPORT_100=placeholder_100
           EOF
 
       - name: Build Debug APK
