@@ -1,4 +1,4 @@
-name: Build & Release APK - زاد المؤمن
+name: Build & Release APK - محمد عبد العظيم الاسلامى
 
 on:
   push:
@@ -89,7 +89,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "build-${{ github.run_number }}"
-          name: "زاد المؤمن - إصدار ${{ github.run_number }}"
+          name: "محمد عبدالعظيم الاسلامى  - إصدار ${{ github.run_number }}"
           files: app/build/outputs/apk/debug/*.apk
           draft: false
           prerelease: false
